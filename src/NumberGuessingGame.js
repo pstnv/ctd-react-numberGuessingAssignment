@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import GuessControl from "./GuessControl";
 import GuessMessage from "./GuessMessage";
 import GameOver from "./GameOver";
@@ -14,13 +14,17 @@ function getRandomNumber() {
 }
 
 const MAX_ATTEMPTS = 5;
-// use this variable outside to avoid its rendering everytime
-let numberToGuess = getRandomNumber();
 
 function NumberGuessingGame() {
+    const [numberToGuess, setNumberToGuess] = useState(null);
     const [numberOfGuesses, setNumberOfGuesses] = useState(0);
     const [latestGuess, setLatestGuess] = useState(null);
     const [guessIsNan, setGuessIsNan] = useState(false);
+
+    // use useEffect hook to avoid double set on numberToGuess variable because of rendering
+    useEffect(() => {
+        setNumberToGuess(getRandomNumber());
+    }, []);
 
     const handleGuess = (guess) => {
         setLatestGuess(guess);
@@ -28,7 +32,7 @@ function NumberGuessingGame() {
     };
 
     const handleReset = () => {
-        numberToGuess = getRandomNumber();
+        setNumberToGuess(getRandomNumber());
         setLatestGuess(null);
         setNumberOfGuesses(0);
     };
